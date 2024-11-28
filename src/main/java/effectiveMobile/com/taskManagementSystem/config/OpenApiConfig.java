@@ -18,14 +18,14 @@ import org.springframework.context.annotation.Configuration;
 )
 public class OpenApiConfig {
     @Bean
-    public OpenAPI libraryProject() {
+    public OpenAPI tms() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Онлайн Библиотека")
-                        .description("Сервис, позволяющий арендовать книгу")
+                        .title("TMS")
+                        .description("Task management System")
                         .version("0.1")
                         .license(new License().name("Apache 2.0").url("http://springdoc.org"))
-                        .contact(new Contact().name("Denis Romashov").email("myemail@gmail.com").url(""))
+                        .contact(new Contact().name("Vladimir Vlasenko").email("sample@email.com").url(""))
                 );
     }
 }

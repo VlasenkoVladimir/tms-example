@@ -18,7 +18,7 @@ import lombok.Setter;
 import java.util.List;
 
 /**
- * Пользователь
+ * User
  */
 
 @Getter

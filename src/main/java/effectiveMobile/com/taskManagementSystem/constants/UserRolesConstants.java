@@ -5,6 +5,5 @@ package effectiveMobile.com.taskManagementSystem.constants;
  */
 public enum UserRolesConstants {
     ADMIN,
-    USER,
-    GUEST
+    USER
 }

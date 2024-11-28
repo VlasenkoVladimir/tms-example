@@ -9,6 +9,9 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Role
+ */
 @Entity
 @Table(name = "roles")
 @Getter
