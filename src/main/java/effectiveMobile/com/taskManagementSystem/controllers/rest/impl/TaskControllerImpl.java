@@ -23,9 +23,9 @@ import java.util.List;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
-//@SecurityRequirement(name = "Bearer Authentication")
-//@CrossOrigin(origins = "*", allowedHeaders = "*")
-
+/**
+ * Task endpoint implementation
+ */
 @Slf4j
 @AllArgsConstructor
 public class TaskControllerImpl extends GenericRestController implements TaskController {

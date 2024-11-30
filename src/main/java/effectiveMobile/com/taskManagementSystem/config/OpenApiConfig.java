@@ -9,6 +9,9 @@ import io.swagger.v3.oas.models.info.License;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * OpenApi configuration
+ */
 @Configuration
 @SecurityScheme(
         name = "Bearer Authentication",

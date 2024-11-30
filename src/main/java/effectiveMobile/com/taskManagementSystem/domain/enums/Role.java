@@ -1,10 +1,9 @@
 package effectiveMobile.com.taskManagementSystem.domain.enums;
 
 /**
- * Priority
+ * Roles
  */
-public enum Priority {
-	HIGH,
-	MIDDLE,
-	LOW
+public enum Role {
+    ROLE_USER,
+    ROLE_ADMIN
 }

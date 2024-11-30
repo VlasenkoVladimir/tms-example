@@ -28,11 +28,11 @@ public class Task extends GenericModel {
 	private String description;
 
 	@Column(name = "status", nullable = false)
-	@Enumerated
+	@Enumerated(EnumType.STRING)
 	private Status status;
 
 	@Column(name = "priority", nullable = false)
-	@Enumerated
+	@Enumerated(EnumType.STRING)
 	private Priority priority;
 
 	@ManyToOne(fetch = FetchType.LAZY)

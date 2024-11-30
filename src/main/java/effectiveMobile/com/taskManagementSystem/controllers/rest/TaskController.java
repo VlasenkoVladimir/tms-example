@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
+/**
+ * Task endpoint interface
+ */
 @RequestMapping("/tasks")
 @Tag(name = "Tasks", description = "Endpoint for tasks")
 public interface TaskController {
@@ -75,6 +77,6 @@ public interface TaskController {
 
     @Operation(summary = "Delete task by id")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Task deleted")})
-    @RequestMapping(method = POST, consumes = APPLICATION_JSON_VALUE)
+    @RequestMapping(method = DELETE, consumes = APPLICATION_JSON_VALUE)
     ResponseEntity<HttpStatus> delete(long taskId);
 }

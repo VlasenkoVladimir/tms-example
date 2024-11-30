@@ -23,6 +23,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
+/**
+ * Comment endpoint interface
+ */
 @RequestMapping("/comments")
 @Tag(name = "Comments", description = "Endpoint for comments")
 public interface CommentController {

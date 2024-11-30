@@ -13,10 +13,18 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
 
+/**
+ * Error controller
+ */
 @Slf4j
 @RestControllerAdvice
 public class ErrorController {
 
+    /**
+     * Validation data
+     * @param e Exception
+     * @return response with violations
+     */
     @ResponseBody
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -35,6 +43,11 @@ public class ErrorController {
         return new ValidationErrorResponse(violations);
     }
 
+    /**
+     * Validation method parameters
+     * @param e Exception
+     * @return response with violations
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
