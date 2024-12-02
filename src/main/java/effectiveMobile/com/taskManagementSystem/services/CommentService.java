@@ -4,9 +4,10 @@ import effectiveMobile.com.taskManagementSystem.domain.Comment;
 import effectiveMobile.com.taskManagementSystem.dto.CommentDto;
 import effectiveMobile.com.taskManagementSystem.mappers.CommentMapper;
 import effectiveMobile.com.taskManagementSystem.repositories.CommentRepository;
-import effectiveMobile.com.taskManagementSystem.repositories.TaskRepository;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -21,15 +22,11 @@ import java.util.List;
 @Slf4j
 @Service
 @Validated
+@RequiredArgsConstructor
 public class CommentService {
 
+    @Autowired
     private final CommentRepository commentRepository;
-    private final CommentMapper commentMapper;
-
-    public CommentService(TaskRepository taskRepository, CommentRepository commentRepository) {
-        this.commentRepository = commentRepository;
-        this.commentMapper = CommentMapper.INSTANCE;
-    }
 
     /**
      * Create new Comment
@@ -40,7 +37,7 @@ public class CommentService {
 
         log.info("Call create with CommentDto is {}", commentDto);
 
-        return commentMapper.toDto(commentRepository.save(commentMapper.toComment(commentDto)));
+        return CommentMapper.INSTANCE.toDto(commentRepository.save(CommentMapper.INSTANCE.toComment(commentDto)));
     }
 
     /**
@@ -52,7 +49,7 @@ public class CommentService {
 
         log.info("Call getAllByTaskId with task id is {}", taskId);
 
-        return commentRepository.getCommentsByTaskId(taskId).stream().map(commentMapper::toDto).toList();
+        return commentRepository.getCommentsByTaskId(taskId).stream().map(CommentMapper.INSTANCE::toDto).toList();
     }
 
     /**
@@ -66,7 +63,7 @@ public class CommentService {
         log.info("Call getAllByTaskIdPaginated with task id is {}", taskId);
 
         Page<Comment> commentsPaginated = commentRepository.getCommentsByTaskId(taskId, pageable);
-        List<CommentDto> result = commentsPaginated.getContent().stream().map(commentMapper::toDto).toList();
+        List<CommentDto> result = commentsPaginated.getContent().stream().map(CommentMapper.INSTANCE::toDto).toList();
 
         return new PageImpl<>(result, pageable, commentsPaginated.getTotalElements());
     }

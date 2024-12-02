@@ -3,7 +3,7 @@ services:
   deploy:
     container_name: TMSlocal
     build:
-      context: main
+      context: src/main
       dockerfile: Dockerfile
     ports:
       - "8081:8081"

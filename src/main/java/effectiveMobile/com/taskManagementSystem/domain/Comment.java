@@ -14,7 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "comments")
-@SequenceGenerator(name = "default_generator", sequenceName = "comments_sequence", allocationSize = 1)
+@SequenceGenerator(name = "comment_id_generator", sequenceName = "comments_sequence", allocationSize = 1)
 public class Comment extends GenericModel {
 
 	@Column(name = "description", nullable = false)

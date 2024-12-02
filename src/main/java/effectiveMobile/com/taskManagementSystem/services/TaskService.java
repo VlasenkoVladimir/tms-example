@@ -9,6 +9,7 @@ import effectiveMobile.com.taskManagementSystem.mappers.TaskMapper;
 import effectiveMobile.com.taskManagementSystem.repositories.TaskRepository;
 import effectiveMobile.com.taskManagementSystem.repositories.UserRepository;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -24,17 +25,11 @@ import java.util.List;
 @Slf4j
 @Service
 @Validated
+@RequiredArgsConstructor
 public class TaskService {
 
     private final TaskRepository taskRepository;
-    private final TaskMapper taskMapper;
     private final UserRepository userRepository;
-
-    public TaskService(TaskRepository taskRepository, UserRepository userRepository) {
-        this.taskRepository = taskRepository;
-        this.taskMapper = TaskMapper.INSTANCE;
-        this.userRepository = userRepository;
-    }
 
     /**
      * Creating new task
@@ -45,13 +40,13 @@ public class TaskService {
     public TaskDto create(@Valid final TaskDto newTaskDto) {
         log.info("Call create new task {}", newTaskDto.getTitle());
 
-        return taskMapper.toDto(taskRepository.save(taskMapper.toTask(newTaskDto)));
+        return TaskMapper.INSTANCE.toDto(taskRepository.save(TaskMapper.INSTANCE.toTask(newTaskDto)));
     }
 
     public TaskDto getById(@Valid final long id) {
         log.info("Call getById with id is {}", id);
 
-        return taskMapper.toDto(taskRepository.getReferenceById(id));
+        return TaskMapper.INSTANCE.toDto(taskRepository.getReferenceById(id));
     }
 
     /**
@@ -64,7 +59,7 @@ public class TaskService {
         log.info("Call listAllTasksPaginated with pageable {}", pageable);
 
         Page<Task> tasksPaginated = taskRepository.findAll(pageable);
-        List<TaskDto> result = tasksPaginated.getContent().stream().map(taskMapper::toDto).toList();
+        List<TaskDto> result = tasksPaginated.getContent().stream().map(TaskMapper.INSTANCE::toDto).toList();
 
         return new PageImpl<>(result, pageable, tasksPaginated.getTotalElements());
     }
@@ -79,7 +74,7 @@ public class TaskService {
     public List<TaskDto> getTasksByAuthorId(@Valid final long authorId) {
         log.info("Call getTasksByAuthor with authorId is {}", authorId);
 
-        return taskRepository.getTasksByAuthorId(authorId).stream().map(taskMapper::toDto).toList();
+        return taskRepository.getTasksByAuthorId(authorId).stream().map(TaskMapper.INSTANCE::toDto).toList();
     }
 
     /**
@@ -93,7 +88,7 @@ public class TaskService {
         log.info("Call getTasksByAuthor with authorId is {} and pageable is {}", authorId, pageable);
 
         Page<Task> taskPage = taskRepository.getTasksByAuthorId(authorId, pageable);
-        List<TaskDto> result = taskPage.getContent().stream().map(taskMapper::toDto).toList();
+        List<TaskDto> result = taskPage.getContent().stream().map(TaskMapper.INSTANCE::toDto).toList();
 
         return new PageImpl<>(result, pageable, taskPage.getTotalElements());
     }
@@ -107,7 +102,7 @@ public class TaskService {
     public List<TaskDto> getTasksByExecutorId(@Valid final long executorId) {
         log.info("Call getTasksByExecutor with executorId is {}", executorId);
 
-        return taskRepository.getTasksByExecutorId(executorId).stream().map(taskMapper::toDto).toList();
+        return taskRepository.getTasksByExecutorId(executorId).stream().map(TaskMapper.INSTANCE::toDto).toList();
     }
 
     /**
@@ -121,7 +116,7 @@ public class TaskService {
         log.info("Call getTasksByExecutor with executorId is {} and pageable is {}", executorId, pageable);
 
         Page<Task> taskPage = taskRepository.getTasksByExecutorId(executorId, pageable);
-        List<TaskDto> result = taskPage.getContent().stream().map(taskMapper::toDto).toList();
+        List<TaskDto> result = taskPage.getContent().stream().map(TaskMapper.INSTANCE::toDto).toList();
 
         return new PageImpl<>(result, pageable, taskPage.getTotalElements());
     }
@@ -140,7 +135,7 @@ public class TaskService {
         final User executor = userRepository.findById(executorId).orElseThrow();
         taskForSetExecutor.setExecutor(executor);
 
-        return taskMapper.toDto(taskRepository.save(taskForSetExecutor));
+        return TaskMapper.INSTANCE.toDto(taskRepository.save(taskForSetExecutor));
     }
 
     /**
@@ -156,7 +151,7 @@ public class TaskService {
         final Task taskForChangeStatus = taskRepository.findById(taskId).orElseThrow();
         taskForChangeStatus.setStatus(newStatus);
 
-        return taskMapper.toDto(taskRepository.save(taskForChangeStatus));
+        return TaskMapper.INSTANCE.toDto(taskRepository.save(taskForChangeStatus));
     }
 
     /**
@@ -173,7 +168,7 @@ public class TaskService {
         taskForChangePriority.setPriority(newPriority);
 
 
-        return taskMapper.toDto(taskRepository.save(taskForChangePriority));
+        return TaskMapper.INSTANCE.toDto(taskRepository.save(taskForChangePriority));
     }
 
     /**
@@ -185,7 +180,7 @@ public class TaskService {
     public TaskDto update(@Valid final TaskDto updatedTask) {
         log.info("Call update with TaskDto is {}", updatedTask);
 
-        return taskMapper.toDto(taskRepository.save(taskMapper.toTask(updatedTask)));
+        return TaskMapper.INSTANCE.toDto(taskRepository.save(TaskMapper.INSTANCE.toTask(updatedTask)));
     }
 
     /**

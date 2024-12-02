@@ -22,7 +22,7 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "users", uniqueConstraints = {@UniqueConstraint(name = "uniqueEmail", columnNames = "email")})
-@SequenceGenerator(name = "default_generator", sequenceName = "users_seq", allocationSize = 1)
+@SequenceGenerator(name = "user_id_generator", sequenceName = "users_seq", allocationSize = 1)
 public class User extends GenericModel implements UserDetails {
 
     @Column(name = "username", unique = true, nullable = false)

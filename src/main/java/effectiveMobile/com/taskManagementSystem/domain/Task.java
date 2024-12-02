@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "tasks")
-@SequenceGenerator(name = "default_generator", sequenceName = "tasks_sequence", allocationSize = 1)
+@SequenceGenerator(name = "task_id__generator", sequenceName = "tasks_sequence", allocationSize = 1)
 public class Task extends GenericModel {
 
 	@Column(name = "title", nullable = false)
@@ -36,11 +36,11 @@ public class Task extends GenericModel {
 	private Priority priority;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "FK_USER_AUTHOR"))
+	@JoinColumn(name = "author_id", foreignKey = @ForeignKey(name = "FK_USER_AUTHOR"))
 	private User author;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "FK_USER_EXECUTOR"))
+	@JoinColumn(name = "executor_id", foreignKey = @ForeignKey(name = "FK_USER_EXECUTOR"))
 	private User executor;
 
 	@OneToMany(mappedBy = "task", cascade = {CascadeType.PERSIST, CascadeType.MERGE})

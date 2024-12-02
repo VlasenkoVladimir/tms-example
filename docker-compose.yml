@@ -5,7 +5,7 @@ services:
     container_name: TMSlocal
     image: postgres
     environment:
-      POSTGRES_DB: "local_db"
+      POSTGRES_DB: "tms_db"
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "12345"
     ports:
