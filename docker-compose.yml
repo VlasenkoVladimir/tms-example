@@ -1,8 +1,6 @@
-#docker-compose up
-version: "3.9"
 services:
   postgres:
-    container_name: TMSlocal
+    container_name: TMSdb
     image: postgres
     environment:
       POSTGRES_DB: "tms_db"
@@ -10,3 +8,27 @@ services:
       POSTGRES_PASSWORD: "12345"
     ports:
       - "5432:5432"
+    networks:
+      tmsapp-network:
+        aliases:
+          - TMSnet
+  app:
+    container_name: TMSapp
+    depends_on:
+      - postgres
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://TMSdb:5432/tms_db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=12345
+    networks:
+      tmsapp-network:
+        aliases:
+          - TMSnet
+networks:
+  tmsapp-network:
+    name: 'tms-network'
