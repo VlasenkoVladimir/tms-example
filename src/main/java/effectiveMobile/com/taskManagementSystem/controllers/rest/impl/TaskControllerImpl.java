@@ -1,12 +1,12 @@
 package effectiveMobile.com.taskManagementSystem.controllers.rest.impl;
 
-import effectiveMobile.com.taskManagementSystem.controllers.rest.GenericRestController;
 import effectiveMobile.com.taskManagementSystem.controllers.rest.TaskController;
 import effectiveMobile.com.taskManagementSystem.domain.enums.Priority;
 import effectiveMobile.com.taskManagementSystem.domain.enums.Status;
 import effectiveMobile.com.taskManagementSystem.dto.TaskDto;
 import effectiveMobile.com.taskManagementSystem.services.TaskService;
 import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -27,14 +28,16 @@ import static org.springframework.http.HttpStatus.OK;
  * Task endpoint implementation
  */
 @Slf4j
+@RestController
+@Validated
 @AllArgsConstructor
-public class TaskControllerImpl extends GenericRestController implements TaskController {
+public class TaskControllerImpl implements TaskController {
 
     private TaskService taskService;
 
 
     @Override
-    public ResponseEntity<HttpStatus> create(@RequestBody @Validated TaskDto taskDto) {
+    public ResponseEntity<HttpStatus> create(@RequestBody @Valid TaskDto taskDto) {
 
         log.info("Call TaskControllerImpl endpoint create with TaskDto is: {}", taskDto);
 
@@ -46,7 +49,7 @@ public class TaskControllerImpl extends GenericRestController implements TaskCon
     }
 
     @Override
-    public ResponseEntity<Page<TaskDto>> getAllPaginated(@RequestBody @Validated Pageable pageable) {
+    public ResponseEntity<Page<TaskDto>> getAllPaginated(@RequestBody @Valid Pageable pageable) {
 
         log.info("Call TaskControllerImpl endpoint getAllPaginated with Pageable is: {}", pageable);
 
@@ -71,7 +74,7 @@ public class TaskControllerImpl extends GenericRestController implements TaskCon
     public ResponseEntity<Page<TaskDto>> getTasksByAuthorIdPaginated(
             @Parameter(name = "Author id", description = "Author id, minimal long value = 1")
             @RequestParam @Min(1) long authorId,
-            @RequestBody @Validated Pageable pageable) {
+            @RequestBody @Valid Pageable pageable) {
 
         log.info("Call TaskControllerImpl endpoint getTasksByAuthorIdPaginated with authorId is: {} and Pageable is: {}", authorId, pageable);
 
@@ -96,7 +99,7 @@ public class TaskControllerImpl extends GenericRestController implements TaskCon
     public ResponseEntity<Page<TaskDto>> getTasksByExecutorIdPaginated(
             @Parameter(name = "Executor id", description = "Executor id, minimal long value = 1")
             @RequestParam @Min(1) long executorId,
-            @RequestBody @Validated Pageable pageable) {
+            @RequestBody @Valid Pageable pageable) {
 
         log.info("Call TaskControllerImpl endpoint getTasksByExecutorIdPaginated with executorId is: {} and Pageable is: {}", executorId, pageable);
 
@@ -122,7 +125,7 @@ public class TaskControllerImpl extends GenericRestController implements TaskCon
     @Override
     public ResponseEntity<TaskDto> changeStatus(
             @Parameter(name = "Status", description = "Task status")
-            @Validated Status newStatus,
+            @Valid Status newStatus,
             @Parameter(name = "Task id", description = "Task id, minimal long value = 1")
             @RequestParam @Min(1) long taskId) {
 
@@ -136,7 +139,7 @@ public class TaskControllerImpl extends GenericRestController implements TaskCon
     @Override
     public ResponseEntity<TaskDto> changePriority(
             @Parameter(name = "Priority", description = "Task priority")
-            @Validated Priority newPriority,
+            @Valid Priority newPriority,
             @Parameter(name = "Task id", description = "Task id, minimal long value = 1")
             @RequestParam @Min(1) long taskId) {
 
@@ -148,7 +151,7 @@ public class TaskControllerImpl extends GenericRestController implements TaskCon
     }
 
     @Override
-    public ResponseEntity<TaskDto> update(@RequestBody @Validated TaskDto updatedTask) {
+    public ResponseEntity<TaskDto> update(@RequestBody @Valid TaskDto updatedTask) {
 
         log.info("Call TaskControllerImpl endpoint update with TaskDto is: {}", updatedTask);
 

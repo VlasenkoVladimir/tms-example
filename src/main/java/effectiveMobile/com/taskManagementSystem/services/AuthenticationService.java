@@ -4,7 +4,7 @@ import effectiveMobile.com.taskManagementSystem.domain.User;
 import effectiveMobile.com.taskManagementSystem.domain.enums.Role;
 import effectiveMobile.com.taskManagementSystem.dto.JwtAuthenticationResponse;
 import effectiveMobile.com.taskManagementSystem.dto.SignInRequest;
-import effectiveMobile.com.taskManagementSystem.dto.SignUpRequestDto;
+import effectiveMobile.com.taskManagementSystem.dto.SignUpRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,7 +30,7 @@ public class AuthenticationService {
      * @param request user data
      * @return token
      */
-    public JwtAuthenticationResponse signUp(SignUpRequestDto request) {
+    public JwtAuthenticationResponse signUp(SignUpRequest request) {
 
         User user = User.builder()
                 .username(request.getUsername())

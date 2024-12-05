@@ -12,12 +12,12 @@ import lombok.Data;
 @Schema(description = "Sign in request")
 public class SignInRequest {
 
-    @Schema(description = "Username", example = "Jon")
+    @Schema(description = "Username", example = "Jonny")
     @Size(min = 5, max = 50, message = "min 5 to max 50 chars")
     @NotBlank(message = "Username can't be null or blank")
     private String username;
 
-    @Schema(description = "Password", example = "my_1secret1_password")
+    @Schema(description = "Password", example = "my_1seCRet7_paSsworD")
     @Size(max = 255, message = "Max 255 chars")
     private String password;
 }

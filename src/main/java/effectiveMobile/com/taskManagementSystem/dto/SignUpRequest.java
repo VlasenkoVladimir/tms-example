@@ -10,9 +10,9 @@ import lombok.Data;
  */
 @Data
 @Schema(description = "Registration request")
-public class SignUpRequestDto {
+public class SignUpRequest {
 
-    @Schema(description = "Username", example = "Jon")
+    @Schema(description = "Username", example = "Jonny")
     @Size(min = 5, max = 50, message = "min 5 to max 50 chars")
     @NotBlank(message = "Username can't be null or blank")
     private String username;

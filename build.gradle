@@ -54,13 +54,3 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
-
-jar {
-    manifest {
-        attributes "Main-Class": "com.effectiveMobile.Main"
-    }
-    from {
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-}
