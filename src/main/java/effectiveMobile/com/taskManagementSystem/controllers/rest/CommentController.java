@@ -33,20 +33,20 @@ public interface CommentController {
     @Operation(summary = "Save comment to DB")
     @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Comment saved")})
     @RequestMapping(method = POST, consumes = APPLICATION_JSON_VALUE)
-    ResponseEntity<HttpStatus> create(
+    ResponseEntity<HttpStatus> createComment(
             @RequestBody @Valid CommentDto commentDto);
 
     @Operation(summary = "Get all comments for task by id")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Task comments got")})
     @RequestMapping(method = GET, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    ResponseEntity<List<CommentDto>> getAllByTaskId(
+    ResponseEntity<List<CommentDto>> getAllCommentsByTaskId(
             @Parameter(name = "Task id", description = "Task number, minimal long value = 1")
             @RequestParam @Min(1) long taskId);
 
     @Operation(summary = "Get page of all comments for task by id")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Page of comments got")})
     @RequestMapping(method = GET, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    ResponseEntity<Page<CommentDto>> getAllByTaskIdPaginated(
+    ResponseEntity<Page<CommentDto>> getAllCommentsByTaskIdPaginated(
             @Parameter(name = "Task id", description = "Task number, minimal long value = 1")
             @RequestParam @Min(1) long taskId,
             @RequestBody @Valid Pageable pageable);

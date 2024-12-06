@@ -37,7 +37,7 @@ public class CommentControllerImpl implements CommentController {
     private final UserService userService;
 
     @Override
-    public ResponseEntity<HttpStatus> create(@Valid CommentDto commentDto) {
+    public ResponseEntity<HttpStatus> createComment(@Valid CommentDto commentDto) {
 
         log.info("Call CommentControllerImpl endpoint create with CommentDto is: {}", commentDto);
 
@@ -67,7 +67,7 @@ public class CommentControllerImpl implements CommentController {
     }
 
     @Override
-    public ResponseEntity<List<CommentDto>> getAllByTaskId(@Valid long taskId) {
+    public ResponseEntity<List<CommentDto>> getAllCommentsByTaskId(@Valid long taskId) {
 
         log.info("Call CommentControllerImpl endpoint getAllByTaskId with Task id is: {}", taskId);
 
@@ -93,7 +93,7 @@ public class CommentControllerImpl implements CommentController {
     }
 
     @Override
-    public ResponseEntity<Page<CommentDto>> getAllByTaskIdPaginated(@Valid long taskId, Pageable pageable) {
+    public ResponseEntity<Page<CommentDto>> getAllCommentsByTaskIdPaginated(@Valid long taskId, Pageable pageable) {
 
         log.info("Call CommentControllerImpl endpoint getAllByTaskIdPaginated with Task id is: {} and Pageable is: {}", taskId, pageable);
 
