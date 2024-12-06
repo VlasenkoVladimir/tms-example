@@ -39,20 +39,20 @@ public interface TaskController {
     @Operation(summary = "Get page of all tasks")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Page of tasks got")})
     @RequestMapping(method = GET, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    ResponseEntity<Page<TaskDto>> getAllPaginated(
+    ResponseEntity<Page<TaskDto>> getAllTasksPaginated(
             @RequestBody @Valid Pageable pageable);
 
     @Operation(summary = "Get all tasks of author")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "List of tasks got")})
     @RequestMapping(method = GET, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    ResponseEntity<List<TaskDto>> getTasksByAuthorId(
+    ResponseEntity<List<TaskDto>> getAllTasksByAuthorId(
             @Parameter(name = "Author id", description = "Author id, minimal long value = 1")
             @RequestParam @Min(1) long authorId);
 
     @Operation(summary = "Get page of author tasks")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Page of tasks got")})
     @RequestMapping(method = GET, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    ResponseEntity<Page<TaskDto>> getTasksByAuthorIdPaginated(
+    ResponseEntity<Page<TaskDto>> getAllTasksByAuthorIdPaginated(
             @Parameter(name = "Author id", description = "Author id, minimal long value = 1")
             @RequestParam @Min(1) long authorId,
             @RequestBody @Valid Pageable pageable);
@@ -60,14 +60,14 @@ public interface TaskController {
     @Operation(summary = "Get all tasks of executor")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "List of tasks got")})
     @RequestMapping(method = GET, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    ResponseEntity<List<TaskDto>> getTasksByExecutorId(
+    ResponseEntity<List<TaskDto>> getAllTasksByExecutorId(
             @Parameter(name = "Executor id", description = "Executor id, minimal long value = 1")
             @RequestParam @Min(1) long executorId);
 
     @Operation(summary = "Get page of executor tasks")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Page of tasks got")})
     @RequestMapping(method = GET, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    ResponseEntity<Page<TaskDto>> getTasksByExecutorIdPaginated(
+    ResponseEntity<Page<TaskDto>> getAllTasksByExecutorIdPaginated(
             @Parameter(name = "Executor id", description = "Executor id, minimal long value = 1")
             @RequestParam @Min(1) long executorId,
             @RequestBody @Valid Pageable pageable);
@@ -75,7 +75,7 @@ public interface TaskController {
     @Operation(summary = "Set task executor")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Executor was set")})
     @RequestMapping(method = POST, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    ResponseEntity<TaskDto> setExecutor(
+    ResponseEntity<TaskDto> setTaskExecutor(
             @Parameter(name = "Task id", description = "Task id, minimal long value = 1")
             @RequestParam @Min(1) long taskId,
             @Parameter(name = "Executor id", description = "Executor id, minimal long value = 1")
@@ -84,7 +84,7 @@ public interface TaskController {
     @Operation(summary = "Set task status")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Status was set")})
     @RequestMapping(method = POST, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    ResponseEntity<TaskDto> changeStatus(
+    ResponseEntity<TaskDto> changeTaskStatus(
             @Parameter(name = "Task status", description = "Status: NEW, IN_PROGRESS, WAITING, DONE")
             @RequestParam Status newStatus,
             @Parameter(name = "Task id", description = "Task id, minimal long value = 1")
@@ -93,7 +93,7 @@ public interface TaskController {
     @Operation(summary = "Set task priority")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Priority was set")})
     @RequestMapping(method = POST, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    ResponseEntity<TaskDto> changePriority(
+    ResponseEntity<TaskDto> changeTaskPriority(
             @Parameter(name = "Task Priority", description = "Priority: HIGH, MIDDLE, LOW")
             @RequestParam Priority newPriority,
             @Parameter(name = "Task id", description = "Task id, minimal long value = 1")
@@ -102,13 +102,13 @@ public interface TaskController {
     @Operation(summary = "Update task")
     @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Task updated")})
     @RequestMapping(method = POST, consumes = APPLICATION_JSON_VALUE)
-    ResponseEntity<TaskDto> update(
+    ResponseEntity<TaskDto> updateTask(
             @RequestBody @Valid TaskDto updatedTask);
 
     @Operation(summary = "Delete task by id")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Task deleted")})
     @RequestMapping(method = DELETE, consumes = APPLICATION_JSON_VALUE)
-    ResponseEntity<HttpStatus> delete(
+    ResponseEntity<HttpStatus> deleteTask(
             @Parameter(name = "Task id", description = "Task id, minimal long value = 1")
             @RequestParam @Min(1) long taskId);
 }

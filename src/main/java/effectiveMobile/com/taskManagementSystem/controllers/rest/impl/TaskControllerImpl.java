@@ -70,7 +70,7 @@ public class TaskControllerImpl implements TaskController {
     }
 
     @Override
-    public ResponseEntity<Page<TaskDto>> getAllPaginated(@RequestBody @Valid Pageable pageable) {
+    public ResponseEntity<Page<TaskDto>> getAllTasksPaginated(@RequestBody @Valid Pageable pageable) {
 
         log.info("Call TaskControllerImpl endpoint getAllPaginated with Pageable is: {}", pageable);
 
@@ -85,7 +85,7 @@ public class TaskControllerImpl implements TaskController {
     }
 
     @Override
-    public ResponseEntity<List<TaskDto>> getTasksByAuthorId(
+    public ResponseEntity<List<TaskDto>> getAllTasksByAuthorId(
             @Parameter(name = "Author id", description = "Author id, minimal long value = 1")
             @RequestParam @Min(1) long authorId) {
 
@@ -112,7 +112,7 @@ public class TaskControllerImpl implements TaskController {
     }
 
     @Override
-    public ResponseEntity<Page<TaskDto>> getTasksByAuthorIdPaginated(
+    public ResponseEntity<Page<TaskDto>> getAllTasksByAuthorIdPaginated(
             @Parameter(name = "Author id", description = "Author id, minimal long value = 1")
             @RequestParam @Min(1) long authorId,
             @RequestBody @Valid Pageable pageable) {
@@ -140,7 +140,7 @@ public class TaskControllerImpl implements TaskController {
     }
 
     @Override
-    public ResponseEntity<List<TaskDto>> getTasksByExecutorId(
+    public ResponseEntity<List<TaskDto>> getAllTasksByExecutorId(
             @Parameter(name = "Executor id", description = "Executor id, minimal long value = 1")
             @RequestParam @Min(1) long executorId) {
 
@@ -167,7 +167,7 @@ public class TaskControllerImpl implements TaskController {
     }
 
     @Override
-    public ResponseEntity<Page<TaskDto>> getTasksByExecutorIdPaginated(
+    public ResponseEntity<Page<TaskDto>> getAllTasksByExecutorIdPaginated(
             @Parameter(name = "Executor id", description = "Executor id, minimal long value = 1")
             @RequestParam @Min(1) long executorId,
             @RequestBody @Valid Pageable pageable) {
@@ -195,7 +195,7 @@ public class TaskControllerImpl implements TaskController {
     }
 
     @Override
-    public ResponseEntity<TaskDto> setExecutor(
+    public ResponseEntity<TaskDto> setTaskExecutor(
             @Parameter(name = "Task id", description = "Task id, minimal long value = 1")
             @RequestParam @Min(1) long taskId,
             @Parameter(name = "Executor id", description = "Executor id, minimal long value = 1")
@@ -225,7 +225,7 @@ public class TaskControllerImpl implements TaskController {
     }
 
     @Override
-    public ResponseEntity<TaskDto> changeStatus(
+    public ResponseEntity<TaskDto> changeTaskStatus(
             @Parameter(name = "Status", description = "Task status")
             @Valid Status newStatus,
             @Parameter(name = "Task id", description = "Task id, minimal long value = 1")
@@ -257,7 +257,7 @@ public class TaskControllerImpl implements TaskController {
     }
 
     @Override
-    public ResponseEntity<TaskDto> changePriority(
+    public ResponseEntity<TaskDto> changeTaskPriority(
             @Parameter(name = "Priority", description = "Task priority")
             @Valid Priority newPriority,
             @Parameter(name = "Task id", description = "Task id, minimal long value = 1")
@@ -287,7 +287,7 @@ public class TaskControllerImpl implements TaskController {
     }
 
     @Override
-    public ResponseEntity<TaskDto> update(@RequestBody @Valid TaskDto updatedTask) {
+    public ResponseEntity<TaskDto> updateTask(@RequestBody @Valid TaskDto updatedTask) {
 
         log.info("Call TaskControllerImpl endpoint update with TaskDto is: {}", updatedTask);
 
@@ -313,7 +313,7 @@ public class TaskControllerImpl implements TaskController {
     }
 
     @Override
-    public ResponseEntity<HttpStatus> delete(
+    public ResponseEntity<HttpStatus> deleteTask(
             @Parameter(name = "Task id, long value", description = "Task number, minimal value = 1")
             @RequestParam @Min(1) long taskId) {
 
