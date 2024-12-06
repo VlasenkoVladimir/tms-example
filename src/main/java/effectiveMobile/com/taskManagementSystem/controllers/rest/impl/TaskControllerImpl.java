@@ -1,10 +1,12 @@
 package effectiveMobile.com.taskManagementSystem.controllers.rest.impl;
 
 import effectiveMobile.com.taskManagementSystem.controllers.rest.TaskController;
+import effectiveMobile.com.taskManagementSystem.domain.User;
 import effectiveMobile.com.taskManagementSystem.domain.enums.Priority;
 import effectiveMobile.com.taskManagementSystem.domain.enums.Status;
 import effectiveMobile.com.taskManagementSystem.dto.TaskDto;
 import effectiveMobile.com.taskManagementSystem.services.TaskService;
+import effectiveMobile.com.taskManagementSystem.services.UserService;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -14,6 +16,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,8 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 /**
  * Task endpoint implementation
@@ -34,6 +37,7 @@ import static org.springframework.http.HttpStatus.OK;
 public class TaskControllerImpl implements TaskController {
 
     private TaskService taskService;
+    private final UserService userService;
 
 
     @Override
@@ -41,11 +45,28 @@ public class TaskControllerImpl implements TaskController {
 
         log.info("Call TaskControllerImpl endpoint create with TaskDto is: {}", taskDto);
 
-        // TODO Security check
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        taskService.create(taskDto);
+        if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ADMIN"))) {
 
-        return new ResponseEntity<>(CREATED);
+            taskService.create(taskDto);
+
+            return new ResponseEntity<>(CREATED);
+        }
+
+        if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("USER"))) {
+
+            User currentUser = userService.getByUsername(auth.getName());
+
+            if (taskDto.getAuthor().equals(currentUser.getId())) {
+
+                taskService.create(taskDto);
+
+                return new ResponseEntity<>(CREATED);
+            }
+        }
+
+        return new ResponseEntity<>(FORBIDDEN);
     }
 
     @Override
@@ -53,9 +74,14 @@ public class TaskControllerImpl implements TaskController {
 
         log.info("Call TaskControllerImpl endpoint getAllPaginated with Pageable is: {}", pageable);
 
-        // TODO Security check
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        return ResponseEntity.status(OK).body(taskService.getAllPaginated(pageable));
+        if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ADMIN"))) {
+
+            return ResponseEntity.status(OK).body(taskService.getAllPaginated(pageable));
+        }
+
+        return new ResponseEntity<>(FORBIDDEN);
     }
 
     @Override
@@ -65,9 +91,24 @@ public class TaskControllerImpl implements TaskController {
 
         log.info("Call TaskControllerImpl endpoint getTasksByAuthorId with authorId is: {}", authorId);
 
-        // TODO Security check
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        return ResponseEntity.status(OK).body(taskService.getTasksByAuthorId(authorId));
+        if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ADMIN"))) {
+
+            return ResponseEntity.status(OK).body(taskService.getTasksByAuthorId(authorId));
+        }
+
+        if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("USER"))) {
+
+            long currentUserId = userService.getByUsername(auth.getName()).getId();
+
+            if (currentUserId == authorId) {
+
+                return ResponseEntity.status(OK).body(taskService.getTasksByAuthorId(currentUserId));
+            }
+        }
+
+        return new ResponseEntity<>(FORBIDDEN);
     }
 
     @Override
@@ -78,9 +119,24 @@ public class TaskControllerImpl implements TaskController {
 
         log.info("Call TaskControllerImpl endpoint getTasksByAuthorIdPaginated with authorId is: {} and Pageable is: {}", authorId, pageable);
 
-        // TODO Security check
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        return ResponseEntity.status(OK).body(taskService.getTasksByAuthorIdPaginated(authorId, pageable));
+        if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ADMIN"))) {
+
+            return ResponseEntity.status(OK).body(taskService.getTasksByAuthorIdPaginated(authorId, pageable));
+        }
+
+        if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("USER"))) {
+
+            long currentUserId = userService.getByUsername(auth.getName()).getId();
+
+            if (currentUserId == authorId) {
+
+                return ResponseEntity.status(OK).body(taskService.getTasksByAuthorIdPaginated(currentUserId, pageable));
+            }
+        }
+
+        return new ResponseEntity<>(FORBIDDEN);
     }
 
     @Override
@@ -90,9 +146,24 @@ public class TaskControllerImpl implements TaskController {
 
         log.info("Call TaskControllerImpl endpoint getTasksByExecutorId with executorId is: {}", executorId);
 
-        // TODO Security check
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        return ResponseEntity.status(OK).body(taskService.getTasksByExecutorId(executorId));
+        if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ADMIN"))) {
+
+            return ResponseEntity.status(OK).body(taskService.getTasksByExecutorId(executorId));
+        }
+
+        if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("USER"))) {
+
+            long currentUserId = userService.getByUsername(auth.getName()).getId();
+
+            if (currentUserId == executorId) {
+
+                return ResponseEntity.status(OK).body(taskService.getTasksByExecutorId(currentUserId));
+            }
+        }
+
+        return new ResponseEntity<>(FORBIDDEN);
     }
 
     @Override
@@ -103,9 +174,24 @@ public class TaskControllerImpl implements TaskController {
 
         log.info("Call TaskControllerImpl endpoint getTasksByExecutorIdPaginated with executorId is: {} and Pageable is: {}", executorId, pageable);
 
-        // TODO Security check
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        return ResponseEntity.status(OK).body(taskService.getTasksByExecutorIdPaginated(executorId, pageable));
+        if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ADMIN"))) {
+
+            return ResponseEntity.status(OK).body(taskService.getTasksByExecutorIdPaginated(executorId, pageable));
+        }
+
+        if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("USER"))) {
+
+            long currentUserId = userService.getByUsername(auth.getName()).getId();
+
+            if (currentUserId == executorId) {
+
+                return ResponseEntity.status(OK).body(taskService.getTasksByExecutorIdPaginated(currentUserId, pageable));
+            }
+        }
+
+        return new ResponseEntity<>(FORBIDDEN);
     }
 
     @Override
@@ -117,9 +203,25 @@ public class TaskControllerImpl implements TaskController {
 
         log.info("Call TaskControllerImpl endpoint setExecutor with taskId is: {} and executorId is: {}", taskId, executorId);
 
-        // TODO Security check
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        return ResponseEntity.status(OK).body(taskService.setExecutor(taskId, executorId));
+        if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ADMIN"))) {
+
+            return ResponseEntity.status(OK).body(taskService.setExecutor(taskId, executorId));
+        }
+
+        if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("USER"))) {
+
+            long currentUserId = userService.getByUsername(auth.getName()).getId();
+            long authorId = taskService.getById(taskId).getAuthor();
+
+            if (currentUserId == authorId) {
+
+                return ResponseEntity.status(OK).body(taskService.setExecutor(taskId, executorId));
+            }
+        }
+
+        return new ResponseEntity<>(FORBIDDEN);
     }
 
     @Override
@@ -131,9 +233,27 @@ public class TaskControllerImpl implements TaskController {
 
         log.info("Call TaskControllerImpl endpoint changeStatus with newStatus is: {} and taskId is: {}", newStatus, taskId);
 
-        // TODO Security check
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        return ResponseEntity.status(OK).body(taskService.changeStatus(newStatus, taskId));
+        if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ADMIN"))) {
+
+            return ResponseEntity.status(OK).body(taskService.changeStatus(newStatus, taskId));
+        }
+
+        if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("USER"))) {
+
+            long currentUserId = userService.getByUsername(auth.getName()).getId();
+            TaskDto task = taskService.getById(taskId);
+            long authorId = task.getAuthor();
+            long executorId = task.getExecutor();
+
+            if (currentUserId == authorId || currentUserId == executorId) {
+
+                return ResponseEntity.status(OK).body(taskService.changeStatus(newStatus, taskId));
+            }
+        }
+
+        return new ResponseEntity<>(FORBIDDEN);
     }
 
     @Override
@@ -145,9 +265,25 @@ public class TaskControllerImpl implements TaskController {
 
         log.info("Call TaskControllerImpl endpoint changePriority with newPriority is: {} and taskId is: {}", newPriority, taskId);
 
-        // TODO Security check
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        return ResponseEntity.status(OK).body(taskService.changePriority(newPriority, taskId));
+        if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ADMIN"))) {
+
+            return ResponseEntity.status(OK).body(taskService.changePriority(newPriority, taskId));
+        }
+
+        if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("USER"))) {
+
+            long currentUserId = userService.getByUsername(auth.getName()).getId();
+            long authorId = taskService.getById(taskId).getAuthor();
+
+            if (currentUserId == authorId) {
+
+                return ResponseEntity.status(OK).body(taskService.changePriority(newPriority, taskId));
+            }
+        }
+
+        return new ResponseEntity<>(FORBIDDEN);
     }
 
     @Override
@@ -155,9 +291,25 @@ public class TaskControllerImpl implements TaskController {
 
         log.info("Call TaskControllerImpl endpoint update with TaskDto is: {}", updatedTask);
 
-        // TODO Security check
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        return ResponseEntity.status(OK).body(taskService.update(updatedTask));
+        if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ADMIN"))) {
+
+            return ResponseEntity.status(OK).body(taskService.update(updatedTask));
+        }
+
+        if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("USER"))) {
+
+            long currentUserId = userService.getByUsername(auth.getName()).getId();
+            long authorId = taskService.getById(updatedTask.getId()).getAuthor();
+
+            if (currentUserId == authorId) {
+
+                return ResponseEntity.status(OK).body(taskService.update(updatedTask));
+            }
+        }
+
+        return new ResponseEntity<>(FORBIDDEN);
     }
 
     @Override
@@ -167,10 +319,28 @@ public class TaskControllerImpl implements TaskController {
 
         log.info("Call TaskControllerImpl endpoint delete with taskId is: {}", taskId);
 
-        // TODO Security check
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        taskService.delete(taskId);
+        if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ADMIN"))) {
 
-        return new ResponseEntity<>(OK);
+            taskService.delete(taskId);
+
+            return new ResponseEntity<>(OK);
+        }
+
+        if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("USER"))) {
+
+            long currentUserId = userService.getByUsername(auth.getName()).getId();
+            long authorId = taskService.getById(taskId).getAuthor();
+
+            if (currentUserId == authorId) {
+
+                taskService.delete(taskId);
+
+                return new ResponseEntity<>(OK);
+            }
+        }
+
+        return new ResponseEntity<>(FORBIDDEN);
     }
 }
